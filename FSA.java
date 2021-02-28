@@ -27,10 +27,11 @@ public class FSA {
 
     public void addTransit(Transit newTransit){
         // update the Transit list
-        List<Transit> updatedList = statesByListOfTransits.get(newTransit.fromState).add(newTransit);
-     
-    	// update the Map statesByListOfTransits by locating "newTransit.fromState" in the map
-    	statesByListOfTransits.put(newTransit.fromState, updatedList);
+        List<Transit> updatedList = statesByListOfTransits.get(newTransit.fromState);
+        updatedList.add(newTransit);
+
+        // update the Map statesByListOfTransits by locating "newTransit.fromState" in the map
+        statesByListOfTransits.put(newTransit.fromState, updatedList);
     }
 
     public String generateRandomLanguage(){
