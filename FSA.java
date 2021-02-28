@@ -21,14 +21,16 @@ public class FSA {
     // Add the new states into the FSA, not including the start state b/c it was already taken in 
     // as a param for the constructor
     public void addState(State newState){
-        // TODO
         // update the Map statesByListOfTransits by puting the state and an empty list of Transits
+        statesByListOfTransits.put(newState, new ArrayList<>());
     }
 
     public void addTransit(Transit newTransit){
-        // TODO
-        // update the Map statesByListOfTransits by locating "newTransit.fromState" in the map,
-        // and update the Transit list
+        // update the Transit list
+        List<Transit> updatedList = statesByListOfTransits.get(newTransit.fromState).add(newTransit);
+     
+    	// update the Map statesByListOfTransits by locating "newTransit.fromState" in the map
+    	statesByListOfTransits.put(newTransit.fromState, updatedList);
     }
 
     public String generateRandomLanguage(){
