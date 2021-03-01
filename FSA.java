@@ -1,20 +1,22 @@
 import java.util.*; 
 import java.lang.StringBuilder;
-import State;
-import Transit;
+// import State;
+// import Transit;
 
 public class FSA {
     // A StringBuilder for building the final language
     public StringBuilder finalLanguage;
 
     // A hashmap maps a state to a list of the OUTGOING transits (excluding incoming transits)
-    private Map<State, List<Transit>> statesByListOfTransits;
+    private Map<State, List<Transit>> statesByListOfTransits = new HashMap<State, List<Transit>>();
     
     // A start state of the FSA
     private State startState;
 
     public FSA(State startState){
         this.startState = startState;
+        List<Transit> transits = new ArrayList<>();
+        statesByListOfTransits.put(startState, transits);
         this.finalLanguage = new StringBuilder(); 
     }
 
@@ -35,18 +37,27 @@ public class FSA {
     }
 
     public String generateRandomLanguage(){
-        // TODO
-        // starting from the start state, simulate the state transitions until it lands on a final 
-        // state and decieds to stop there
+        State currentState = startState;
 
-        // psudocode:
-        // currentState = startState
-        // while (!currentState.isFinal):
-        //      search in the statesByListOfTransits for possible transits -> transit.toState
-        //      randomly choose a state
-        //      update finalLanguage(StringBuilder)
-        //      update currentState
-        
+        int rand = 1 + (int)(Math.random() * 20);
+        int counter = 0;
+
+        while ((! currentState.isFinal) || (counter < rand)){
+            // search in the statesByListOfTransits for possible transits -> transit.toState
+            List<Transit> transitList = statesByListOfTransits.get(currentState);
+            
+            for(Transit transit : transitList){
+                counter ++;
+                State toState = transit.toState;
+
+                // int random_int = (int)(Math.random() * 2);
+                // update finalLanguage(StringBuilder)
+                finalLanguage.append(transit.weight);
+                    
+                currentState = toState;
+            }
+        }
+
         return finalLanguage.toString();
     }
 }

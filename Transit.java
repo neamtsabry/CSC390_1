@@ -1,4 +1,4 @@
-import State;
+// import State;
 
 /* A data structure representing the FSA state transitions. */
 public class Transit {

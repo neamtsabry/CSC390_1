@@ -1,6 +1,7 @@
-import FSA;
-import State;
-import Transit;
+// import FSA;
+// import State;
+// import Transit;
+// import TestFSA.FSA;
 
 /* 
     The sample testing class for generating a language based on the prompts:
@@ -10,6 +11,11 @@ import Transit;
 public class TestFSA {
     
     public static void main(String[] args) {
+        //+ "\n" + "Language for first FSA: " + generateFSA2();
+        System.out.println("Language for first FSA: " + generateFSA1()); 
+    }
+
+    public static String generateFSA1(){
         // initialize states
         State s0 = new State(0, false); //start state
         State s1 = new State(1, true);
@@ -25,6 +31,10 @@ public class TestFSA {
 
         // generates the random language
         String sampleLang = fsa.generateRandomLanguage();
-        System.out.println("A sample language for '0(01)*' is: " + sampleLang);
+        return "A sample language for '0(01)*' is: " + sampleLang;
+    }
+
+    public String generateFSA2(){
+
     }
 }
