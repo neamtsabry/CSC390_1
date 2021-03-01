@@ -48,13 +48,16 @@ public class FSA {
             
             for(Transit transit : transitList){
                 counter ++;
-                State toState = transit.toState;
-
+                List<State> toStates = transit.toStates;
+                //System.out.println(toState.id);
                 // int random_int = (int)(Math.random() * 2);
                 // update finalLanguage(StringBuilder)
                 finalLanguage.append(transit.weight);
                     
-                currentState = toState;
+                //currentState = toStates;
+                Random randElem = new Random();
+                State randToState = toStates.get(randElem.nextInt(toStates.size()));
+                currentState = randToState;
             }
         }
 
