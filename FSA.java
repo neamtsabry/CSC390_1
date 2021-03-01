@@ -47,10 +47,12 @@ public class FSA {
             List<Transit> transitList = statesByListOfTransits.get(currentState);
             
             for(Transit transit : transitList){
+                // incremennt counter until it reaches the desired random int
                 counter ++;
+
+                // get to states list
                 List<State> toStates = transit.toStates;
-                //System.out.println(toState.id);
-                // int random_int = (int)(Math.random() * 2);
+
                 // update finalLanguage(StringBuilder)
                 finalLanguage.append(transit.weight);
                     
