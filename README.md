@@ -4,6 +4,10 @@
 
 Eileen, Chris, Nashshaba, Neamat
 
+## Clone from Git 
+
+https://github.com/neamtsabry/CSC390_1.git
+
 ## Preconditions:
 
 1. Install the Java JDK (make sure it's version 13); NOT the JRE: 
