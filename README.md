@@ -1,4 +1,6 @@
-# CSC 390 Assignment #1: FSA Generator
+# FSA Generator
+
+Smith College / CSC390 / A1
 
 ## Collaborators: 
 
