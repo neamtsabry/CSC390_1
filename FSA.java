@@ -1,7 +1,5 @@
 import java.util.*; 
 import java.lang.StringBuilder;
-// import State;
-// import Transit;
 
 public class FSA {
     // A StringBuilder for building the final language

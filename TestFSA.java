@@ -1,17 +1,7 @@
 import java.util.Arrays;
 
-// import FSA;
-// import State;
-// import Transit;
-// import TestFSA.FSA;
-
-/* 
-    The sample testing class for generating a language based on the prompts:
-    (TODO)
-    This part so far only tests for "0(01)*", but also needs "1(011)*0*"
-*/
 public class TestFSA {
-    
+
     public static void main(String[] args) {
         System.out.println("Language for first FSA: " + generateFSA1()); 
         System.out.println("Language for first FSA: " + generateFSA2()); 
@@ -57,7 +47,6 @@ public class TestFSA {
         fsa.addTransit(new Transit(s2, Arrays.asList(s3), 1));
         fsa.addTransit(new Transit(s3, Arrays.asList(s4), 1));
         fsa.addTransit(new Transit(s4, Arrays.asList(s5,s2), 0));
-        //fsa.addTransit(new Transit(s4, s2, 0));
         fsa.addTransit(new Transit(s5, Arrays.asList(s5), 0));
 
         // generates the random language
