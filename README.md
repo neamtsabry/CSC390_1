@@ -1,5 +1,7 @@
 # CSC 390 Assignment #2: FSA Strange English Words Generator
 
+Smith College / CSC390 / A1
+
 ## Collaborators: 
 
 Eileen, Chris, Nashshaba, Neamat
