@@ -37,28 +37,34 @@ public class FSA {
     public String generateRandomLanguage(){
         State currentState = startState;
 
-        int rand = 1 + (int)(Math.random() * 20);
+        // int rand = 3 + (int)(Math.random() * 15);
+        Random r = new Random();
+        int max = 15;
+        int min = 3;
+        int rand = r.nextInt((max - min) + 1) + min;
         int counter = 0;
 
-        while ((! currentState.isFinal) || (counter < rand)){
+        while (counter < rand){
             // search in the statesByListOfTransits for possible transits -> transit.toState
             List<Transit> transitList = statesByListOfTransits.get(currentState);
+            // System.out.println(transitList.toString());
+
+            Random random = new Random();
+            Transit randTransit = transitList.get(random.nextInt(transitList.size()));
+
+            // incremennt counter until it reaches the desired random int
+            counter ++;
+
+            // get to states list
+            List<State> toStates = randTransit.toStates;
+
+            // update finalLanguage(StringBuilder)
+            finalLanguage.append(randTransit.weight);
             
-            for(Transit transit : transitList){
-                // incremennt counter until it reaches the desired random int
-                counter ++;
-
-                // get to states list
-                List<State> toStates = transit.toStates;
-
-                // update finalLanguage(StringBuilder)
-                finalLanguage.append(transit.weight);
-                    
-                //currentState = toStates;
-                Random randElem = new Random();
-                State randToState = toStates.get(randElem.nextInt(toStates.size()));
-                currentState = randToState;
-            }
+            //currentState = toStates;
+            Random randElem = new Random();
+            State randToState = toStates.get(randElem.nextInt(toStates.size()));
+            currentState = randToState;
         }
 
         return finalLanguage.toString();

@@ -5,11 +5,9 @@ import java.util.List;
 public class Transit {
     public State fromState;
     public List<State> toStates;
+    public String weight;
     
-    // either 0 or 1
-    public int weight;
-    
-    public Transit(State fromState, List<State> toStates, int weight){
+    public Transit(State fromState, List<State> toStates, String weight){
         this.fromState = fromState;
         this.toStates = toStates;
         this.weight = weight;

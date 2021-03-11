@@ -1,4 +1,4 @@
-# CSC 390 Assignment #1: FSA Generator
+# CSC 390 Assignment #2: FSA Strange English Words Generator
 
 ## Collaborators: 
 
