@@ -1,15 +1,54 @@
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.util.*;
 
 public class TestFSA {
 
-    public static void main(String[] args) {
-        // System.out.println("Language for first FSA: " + generateFSA1()); 
-        // System.out.println("Language for second FSA: " + generateFSA2()); 
+    public static void main(String[] args) throws IOException {
+        // System.out.println("Language for first FSA: " + generateFSA1());
+        // System.out.println("Language for second FSA: " + generateFSA2());
 
-        for(int i = 0; i < 10; i++){
-            System.out.println(generateFSAWords(i+1));
-        }
+        // for (int i = 0; i < 10; i++) {
+        //     System.out.println(generateFSAWords(i + 1));
+        // }
+
+        generateSentences();
+
+    
     }
+
+    public static void generateSentences() throws IOException {
+        
+        // List of nouns, verbs, adjectives, determiners, prepositions
+        List <String> nouns = Files.readAllLines(new File("word-files/nouns.txt").toPath(), Charset.defaultCharset());
+        List <String> verbs = Files.readAllLines(new File("word-files/verbs.txt").toPath(), Charset.defaultCharset());
+        List <String> adj = Files.readAllLines(new File("word-files/adj.txt").toPath(), Charset.defaultCharset());
+        List <String> det = Files.readAllLines(new File("word-files/det.txt").toPath(), Charset.defaultCharset());
+        List <String> prep = Files.readAllLines(new File("word-files/prep.txt").toPath(), Charset.defaultCharset());
+
+        // Punctuations
+        String period = ".";
+        String comma = ",";
+        String qMark = "?";
+        String space = " ";
+        
+
+        // // initialize states
+        // State s0 = new State(0, false); //start state
+
+        // // initialize the FSA
+        // FSA fsa = new FSA(s0);
+
+        // // generate the random language
+        // String sampleLang = fsa.generateRandomLanguage();
+        // return sampleLang;
+
+
+
+    }
+
 
     public static String generateFSAWords(int count){
         // initialize states
