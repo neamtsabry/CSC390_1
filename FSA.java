@@ -37,23 +37,15 @@ public class FSA {
     public String generateRandomLanguage(){
         State currentState = startState;
 
-        // int rand = 3 + (int)(Math.random() * 15);
-        Random r = new Random();
-        int max = 15;
-        int min = 3;
-        int rand = r.nextInt((max - min) + 1) + min;
-        int counter = 0;
+        // Since the length of a sentence is not restricted, it is not neccessary to use counter in this case
 
-        while (counter < rand){
+        while (!currentState.isFinal){
             // search in the statesByListOfTransits for possible transits -> transit.toState
             List<Transit> transitList = statesByListOfTransits.get(currentState);
             // System.out.println(transitList.toString());
 
             Random random = new Random();
             Transit randTransit = transitList.get(random.nextInt(transitList.size()));
-
-            // incremennt counter until it reaches the desired random int
-            counter ++;
 
             // get to states list
             List<State> toStates = randTransit.toStates;
