@@ -37,18 +37,25 @@ public class FSA {
     public String generateRandomLanguage(){
         State currentState = startState;
 
+
+        Random rd = new Random(); // creating Random object
+        Boolean randBool = true; 
         // Since the length of a sentence is not restricted, it is not neccessary to use counter in this case
 
-        while (!currentState.isFinal){
+        while (randBool){
             // search in the statesByListOfTransits for possible transits -> transit.toState
             List<Transit> transitList = statesByListOfTransits.get(currentState);
             // System.out.println(transitList.toString());
 
-            Random random = new Random();
-            Transit randTransit = transitList.get(random.nextInt(transitList.size()));
+            if(transitList.size() == 0) break;
+
+            Random randomINT = new Random();
+            Transit randTransit = transitList.get(randomINT.nextInt(transitList.size()));
 
             // get to states list
             List<State> toStates = randTransit.toStates;
+
+            if(toStates.size() == 0) break;
 
             // update finalLanguage(StringBuilder)
             finalLanguage.append(randTransit.weight);
@@ -57,6 +64,11 @@ public class FSA {
             Random randElem = new Random();
             State randToState = toStates.get(randElem.nextInt(toStates.size()));
             currentState = randToState;
+
+            // only when state is final
+            if(currentState.isFinal){
+                randBool = rd.nextBoolean();
+            }
         }
 
         return finalLanguage.toString();

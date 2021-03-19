@@ -32,6 +32,9 @@ public class TestFSA {
     public static void main(String[] args) throws IOException {
         System.out.println(generateNP());
         System.out.println(generateS());
+        System.out.println(generatePP());
+        System.out.println(generateVP());
+        System.out.println(generateWHNP());
     }
 
     // This function should be implemented in the next assignment so we can leave it here
@@ -87,13 +90,14 @@ public class TestFSA {
         State s0 = new State(0, false);
         State s1 = new State(1, false);
         State s2 = new State(2, false);
-        State s3 = new State(3, true);
+        State s3 = new State(3, false);
         State s4 = new State(4, false);
-        State s5 = new State(5, false);
-
+        State s5 = new State(5, true);
+        State s6 = new State(6, true);
+        State s7 = new State(7, true);
 
         FSA npfsa = new FSA(s0);
-        for (State state : Arrays.asList(s1, s2, s3, s4, s5)){
+        for (State state : Arrays.asList(s1, s2, s3, s4, s5, s6, s7)){
             npfsa.addState(state);
         }
 
@@ -103,16 +107,105 @@ public class TestFSA {
         npfsa.addTransit(new Transit(s1, Arrays.asList(s2), space));
         npfsa.addTransit(new Transit(s2, Arrays.asList(s1), adjective));
         npfsa.addTransit(new Transit(s2, Arrays.asList(s3), noun));
+        npfsa.addTransit(new Transit(s3, Arrays.asList(s6), empty));
         npfsa.addTransit(new Transit(s3, Arrays.asList(s4), space));
-        npfsa.addTransit(new Transit(s3, Arrays.asList(s5), space));
-        npfsa.addTransit(new Transit(s4, Arrays.asList(s3), prepositionalPhrase));
-        npfsa.addTransit(new Transit(s5, Arrays.asList(s3), whAdverbPhrase));
-
+        npfsa.addTransit(new Transit(s4, Arrays.asList(s5), prepositionalPhrase));
+        npfsa.addTransit(new Transit(s4, Arrays.asList(s7), whAdverbPhrase));
+    
         // generates a random NP phrase structure sequence
         String sampleNP = npfsa.generateRandomLanguage();
         return "Sample NP: " + sampleNP;
     }
 
+    public static String generatePP(){
+        State s0 = new State(0, false);
+        State s1 = new State(1, false);
+        State s2 = new State(2, false);
+        State s3 = new State(2, true);
+
+        FSA ppfsa = new FSA(s0);
+        for (State state : Arrays.asList(s1, s2, s3)){
+            ppfsa.addState(state);
+        }
+
+        ppfsa.addTransit(new Transit(s0, Arrays.asList(s1), preposition));
+        ppfsa.addTransit(new Transit(s1, Arrays.asList(s2), space));
+        ppfsa.addTransit(new Transit(s2, Arrays.asList(s3), nounPhrase));
+
+        // generates a random NP phrase structure sequence
+        String samplePP = ppfsa.generateRandomLanguage();
+        return "Sample PP: " + samplePP;
+    }
+
+    public static String generateVP(){
+        State s0 = new State(0, false);
+        State s1 = new State(1, true);
+        State s2 = new State(2, false);
+        State s3 = new State(3, true);
+        State s4 = new State(4, false);
+        State s5 = new State(5, true);
+        State s6 = new State(6, true);
+        State s7 = new State(7, false);
+        State s8 = new State(8, true);
+
+        FSA vpfsa = new FSA(s0);
+        for (State state : Arrays.asList(s1, s2, s3, s4, s5, s6, s7, s8)){
+            vpfsa.addState(state);
+        }
+
+        vpfsa.addTransit(new Transit(s0, Arrays.asList(s1), verb));
+        vpfsa.addTransit(new Transit(s1, Arrays.asList(s2), space));
+        vpfsa.addTransit(new Transit(s2, Arrays.asList(s3), nounPhrase));
+        vpfsa.addTransit(new Transit(s3, Arrays.asList(s4), space));
+        vpfsa.addTransit(new Transit(s4, Arrays.asList(s5), prepositionalPhrase));
+        vpfsa.addTransit(new Transit(s5, Arrays.asList(s4), space));
+        vpfsa.addTransit(new Transit(s0, Arrays.asList(s6), verb));
+        vpfsa.addTransit(new Transit(s6, Arrays.asList(s7), space));
+        vpfsa.addTransit(new Transit(s7, Arrays.asList(s8), adjective));
+
+        // generates a random NP phrase structure sequence
+        String sampleVP = vpfsa.generateRandomLanguage();
+        return "Sample VP: " + sampleVP;
+    }
+
+    public static String generateWHNP(){
+        State s0 = new State(0, false);
+        State s1 = new State(1, false);
+        State s2 = new State(2, false);
+        State s3 = new State(3, false);
+        State s4 = new State(4, false);
+        State s5 = new State(5, false);
+        State s6 = new State(6, false);
+        State s7 = new State(7, false);
+        State s8 = new State(8, false);
+        State s9 = new State(9, false);
+        State s10 = new State(10, false);
+        State s11 = new State(11, false);
+        State s12 = new State(12, true);
+
+        FSA wfsa = new FSA(s0);
+        for (State state : Arrays.asList(s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12)){
+            wfsa.addState(state);
+        }
+
+        wfsa.addTransit(new Transit(s0, Arrays.asList(s1), comma));
+        wfsa.addTransit(new Transit(s1, Arrays.asList(s2),space));
+        wfsa.addTransit(new Transit(s2, Arrays.asList(s3), whAdverb));
+        wfsa.addTransit(new Transit(s3, Arrays.asList(s4), space));
+        wfsa.addTransit(new Transit(s4, Arrays.asList(s5), nounPhrase));
+        wfsa.addTransit(new Transit(s4, Arrays.asList(s6), aux));
+        wfsa.addTransit(new Transit(s5, Arrays.asList(s7), space));
+        wfsa.addTransit(new Transit(s7, Arrays.asList(s8), aux));
+        wfsa.addTransit(new Transit(s6, Arrays.asList(s8), empty));
+        wfsa.addTransit(new Transit(s8, Arrays.asList(s9), space));
+        wfsa.addTransit(new Transit(s9, Arrays.asList(s10), verbPhrase));
+        wfsa.addTransit(new Transit(s10, Arrays.asList(s11), comma));
+        wfsa.addTransit(new Transit(s11, Arrays.asList(s12), space));
+
+        // generates a random S phrase structure sequence
+        String sampleW = wfsa.generateRandomLanguage();
+        return "Sample WHNP: " + sampleW;
+    }
 
     public static String generateFSAWords(int count){
         // initialize states
