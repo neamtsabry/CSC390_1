@@ -45,6 +45,7 @@ public class TestFSA {
         List <String> adj = Files.readAllLines(new File("word-files/adj.txt").toPath(), Charset.defaultCharset());
         List <String> det = Files.readAllLines(new File("word-files/det.txt").toPath(), Charset.defaultCharset());
         List <String> prep = Files.readAllLines(new File("word-files/prep.txt").toPath(), Charset.defaultCharset());
+        List <String> aux = Files.readAllLines(new File("word-files/aux.txt").toPath(), Charset.defaultCharset());
     }
 
     public static String generateS(){
