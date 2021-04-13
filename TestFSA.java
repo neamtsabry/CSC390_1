@@ -12,51 +12,30 @@ public class TestFSA {
     private static final String space = " ";
     private static final String empty = "";
 
-    // Phrase Structures
-    private static final String np = "NP";
-    private static final String sentence = "S";
-    private static final String aux = "AUX";
-    private static final String verbPhrase = "VP";
-    private static final String nounPhrase = "NP";
-    private static final String determiner = "DET";
-    private static final String adjective = "ADJ";
-    private static final String noun = "N";
-    private static final String whAdverbPhrase = "WHNP";
-    private static final String preposition = "PREP";
-    private static final String prepositionalPhrase = "PP";
-    private static final String verb = "V";
-    private static final String whAdverb = "WP";
-
     private static List <String> nouns;
     private static List <String> verbs;
     private static List <String> adj;
     private static List <String> det;
     private static List <String> prep;
-
+    private static List <String> aux;
+    private static List <String> whAdverb;
 
     public static void main(String[] args) throws IOException {
-        // System.out.println(generateNP());
-        // System.out.println(generateS());
-        // System.out.println(generatePP());
-        // System.out.println(generateVP());
-        // System.out.println(generateWHNP());
-        System.out.println(generateS(10));
-    }
-
-    // This function should be implemented in the next assignment so we can leave it here
-    public static void generateTrueSentences() throws IOException {
-        // List of nouns, verbs, adjectives, determiners, prepositions
         nouns = Files.readAllLines(new File("word-files/nouns.txt").toPath(), Charset.defaultCharset());
         verbs = Files.readAllLines(new File("word-files/verbs.txt").toPath(), Charset.defaultCharset());
         adj = Files.readAllLines(new File("word-files/adj.txt").toPath(), Charset.defaultCharset());
         det = Files.readAllLines(new File("word-files/det.txt").toPath(), Charset.defaultCharset());
         prep = Files.readAllLines(new File("word-files/prep.txt").toPath(), Charset.defaultCharset());
+        aux = Files.readAllLines(new File("word-files/aux.txt").toPath(), Charset.defaultCharset());
+        whAdverb = Files.readAllLines(new File("word-files/whAdverb.txt").toPath(), Charset.defaultCharset());
+        System.out.println(generateS(10));
     }
+
 
     public static String generateS(int depth){
 
         Random rd = new Random();
-        
+
         State s0 = new State(0, false);
         State s1 = new State(1, false);
         State s2 = new State(2, false);
@@ -77,10 +56,10 @@ public class TestFSA {
         }
 
         sfsa.addTransit(new Transit(s0, Arrays.asList(s1), generateNP(depth-1)));
-        sfsa.addTransit(new Transit(s0, Arrays.asList(s3), rd.nextInt(aux.size())));
+        sfsa.addTransit(new Transit(s0, Arrays.asList(s3), aux.get(rd.nextInt(aux.size()-1))));
         sfsa.addTransit(new Transit(s1, Arrays.asList(s2), space));
         sfsa.addTransit(new Transit(s2, Arrays.asList(s4), generateVP(depth-1)));
-        sfsa.addTransit(new Transit(s2, Arrays.asList(s5), aux));
+        sfsa.addTransit(new Transit(s2, Arrays.asList(s5), aux.get(rd.nextInt(aux.size()-1))));
         sfsa.addTransit(new Transit(s4, Arrays.asList(s6), period));
         sfsa.addTransit(new Transit(s5, Arrays.asList(s7), space));
         sfsa.addTransit(new Transit(s7, Arrays.asList(s4), generateVP(depth-1)));
@@ -100,6 +79,8 @@ public class TestFSA {
             return empty;
         }
 
+        Random rd = new Random();
+
         State s0 = new State(0, false);
         State s1 = new State(1, false);
         State s2 = new State(2, false);
@@ -114,12 +95,12 @@ public class TestFSA {
             npfsa.addState(state);
         }
 
-        npfsa.addTransit(new Transit(s0, Arrays.asList(s1), determiner));
-        npfsa.addTransit(new Transit(s0, Arrays.asList(s1), adjective));
-        npfsa.addTransit(new Transit(s0, Arrays.asList(s3), noun));
+        npfsa.addTransit(new Transit(s0, Arrays.asList(s1), det.get(rd.nextInt(det.size()-1))));
+        npfsa.addTransit(new Transit(s0, Arrays.asList(s1), adj.get(rd.nextInt(adj.size()-1))));
+        npfsa.addTransit(new Transit(s0, Arrays.asList(s3), nouns.get(rd.nextInt(nouns.size()-1))));
         npfsa.addTransit(new Transit(s1, Arrays.asList(s2), space));
-        npfsa.addTransit(new Transit(s2, Arrays.asList(s1), adjective));
-        npfsa.addTransit(new Transit(s2, Arrays.asList(s3), noun));
+        npfsa.addTransit(new Transit(s2, Arrays.asList(s1), adj.get(rd.nextInt(adj.size()-1))));
+        npfsa.addTransit(new Transit(s2, Arrays.asList(s3), nouns.get(rd.nextInt(nouns.size()-1))));
         npfsa.addTransit(new Transit(s3, Arrays.asList(s6), empty));
         npfsa.addTransit(new Transit(s3, Arrays.asList(s4), space));
         npfsa.addTransit(new Transit(s4, Arrays.asList(s5), generatePP(depth-1)));
@@ -134,7 +115,7 @@ public class TestFSA {
         if (depth <= 0){
             return empty;
         }
-
+        Random rd = new Random();
         State s0 = new State(0, false);
         State s1 = new State(1, false);
         State s2 = new State(2, false);
@@ -145,7 +126,7 @@ public class TestFSA {
             ppfsa.addState(state);
         }
 
-        ppfsa.addTransit(new Transit(s0, Arrays.asList(s1), preposition));
+        ppfsa.addTransit(new Transit(s0, Arrays.asList(s1), prep.get(rd.nextInt(prep.size()-1))));
         ppfsa.addTransit(new Transit(s1, Arrays.asList(s2), space));
         ppfsa.addTransit(new Transit(s2, Arrays.asList(s3), generateNP(depth-1)));
 
@@ -158,7 +139,7 @@ public class TestFSA {
         if (depth <= 0){
             return empty;
         }
-
+        Random rd = new Random();
         State s0 = new State(0, false);
         State s1 = new State(1, true);
         State s2 = new State(2, false);
@@ -174,15 +155,15 @@ public class TestFSA {
             vpfsa.addState(state);
         }
 
-        vpfsa.addTransit(new Transit(s0, Arrays.asList(s1), verb));
+        vpfsa.addTransit(new Transit(s0, Arrays.asList(s1), verbs.get(rd.nextInt(verbs.size()-1))));
         vpfsa.addTransit(new Transit(s1, Arrays.asList(s2), space));
         vpfsa.addTransit(new Transit(s2, Arrays.asList(s3), generateNP(depth-1)));
         vpfsa.addTransit(new Transit(s3, Arrays.asList(s4), space));
         vpfsa.addTransit(new Transit(s4, Arrays.asList(s5), generatePP(depth-1)));
         vpfsa.addTransit(new Transit(s5, Arrays.asList(s4), space));
-        vpfsa.addTransit(new Transit(s0, Arrays.asList(s6), verb));
+        vpfsa.addTransit(new Transit(s0, Arrays.asList(s6), verbs.get(rd.nextInt(verbs.size()-1))));
         vpfsa.addTransit(new Transit(s6, Arrays.asList(s7), space));
-        vpfsa.addTransit(new Transit(s7, Arrays.asList(s8), adjective));
+        vpfsa.addTransit(new Transit(s7, Arrays.asList(s8), adj.get(rd.nextInt(adj.size()-1))));
 
         // generates a random NP phrase structure sequence
         String sampleVP = vpfsa.generateRandomLanguage();
@@ -193,7 +174,7 @@ public class TestFSA {
         if (depth <= 0){
             return empty;
         }
-
+        Random rd = new Random();
         State s0 = new State(0, false);
         State s1 = new State(1, false);
         State s2 = new State(2, false);
@@ -214,13 +195,13 @@ public class TestFSA {
         }
 
         wfsa.addTransit(new Transit(s0, Arrays.asList(s1), comma));
-        wfsa.addTransit(new Transit(s1, Arrays.asList(s2),space));
-        wfsa.addTransit(new Transit(s2, Arrays.asList(s3), whAdverb));
+        wfsa.addTransit(new Transit(s1, Arrays.asList(s2), space));
+        wfsa.addTransit(new Transit(s2, Arrays.asList(s3), whAdverb.get(rd.nextInt(whAdverb.size()-1))));
         wfsa.addTransit(new Transit(s3, Arrays.asList(s4), space));
         wfsa.addTransit(new Transit(s4, Arrays.asList(s5), generateNP(depth-1)));
-        wfsa.addTransit(new Transit(s4, Arrays.asList(s6), aux));
+        wfsa.addTransit(new Transit(s4, Arrays.asList(s6), aux.get(rd.nextInt(aux.size()-1))));
         wfsa.addTransit(new Transit(s5, Arrays.asList(s7), space));
-        wfsa.addTransit(new Transit(s7, Arrays.asList(s8), aux));
+        wfsa.addTransit(new Transit(s7, Arrays.asList(s8), aux.get(rd.nextInt(aux.size()-1))));
         wfsa.addTransit(new Transit(s6, Arrays.asList(s8), empty));
         wfsa.addTransit(new Transit(s8, Arrays.asList(s9), space));
         wfsa.addTransit(new Transit(s9, Arrays.asList(s10), generateVP(depth-1)));
