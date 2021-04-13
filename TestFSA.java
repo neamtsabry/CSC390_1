@@ -4,7 +4,6 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.*;
 
-
 public class TestFSA {
     // Punctuations
     private static final String period = ".";
@@ -28,26 +27,36 @@ public class TestFSA {
     private static final String verb = "V";
     private static final String whAdverb = "WP";
 
+    private static List <String> nouns;
+    private static List <String> verbs;
+    private static List <String> adj;
+    private static List <String> det;
+    private static List <String> prep;
+
 
     public static void main(String[] args) throws IOException {
-        System.out.println(generateNP());
-        System.out.println(generateS());
-        System.out.println(generatePP());
-        System.out.println(generateVP());
-        System.out.println(generateWHNP());
+        // System.out.println(generateNP());
+        // System.out.println(generateS());
+        // System.out.println(generatePP());
+        // System.out.println(generateVP());
+        // System.out.println(generateWHNP());
+        System.out.println(generateS(10));
     }
 
     // This function should be implemented in the next assignment so we can leave it here
     public static void generateTrueSentences() throws IOException {
         // List of nouns, verbs, adjectives, determiners, prepositions
-        List <String> nouns = Files.readAllLines(new File("word-files/nouns.txt").toPath(), Charset.defaultCharset());
-        List <String> verbs = Files.readAllLines(new File("word-files/verbs.txt").toPath(), Charset.defaultCharset());
-        List <String> adj = Files.readAllLines(new File("word-files/adj.txt").toPath(), Charset.defaultCharset());
-        List <String> det = Files.readAllLines(new File("word-files/det.txt").toPath(), Charset.defaultCharset());
-        List <String> prep = Files.readAllLines(new File("word-files/prep.txt").toPath(), Charset.defaultCharset());
+        nouns = Files.readAllLines(new File("word-files/nouns.txt").toPath(), Charset.defaultCharset());
+        verbs = Files.readAllLines(new File("word-files/verbs.txt").toPath(), Charset.defaultCharset());
+        adj = Files.readAllLines(new File("word-files/adj.txt").toPath(), Charset.defaultCharset());
+        det = Files.readAllLines(new File("word-files/det.txt").toPath(), Charset.defaultCharset());
+        prep = Files.readAllLines(new File("word-files/prep.txt").toPath(), Charset.defaultCharset());
     }
 
-    public static String generateS(){
+    public static String generateS(int depth){
+
+        Random rd = new Random();
+        
         State s0 = new State(0, false);
         State s1 = new State(1, false);
         State s2 = new State(2, false);
@@ -67,18 +76,18 @@ public class TestFSA {
             sfsa.addState(state);
         }
 
-        sfsa.addTransit(new Transit(s0, Arrays.asList(s1), nounPhrase));
-        sfsa.addTransit(new Transit(s0, Arrays.asList(s3), aux));
+        sfsa.addTransit(new Transit(s0, Arrays.asList(s1), generateNP(depth-1)));
+        sfsa.addTransit(new Transit(s0, Arrays.asList(s3), rd.nextInt(aux.size())));
         sfsa.addTransit(new Transit(s1, Arrays.asList(s2), space));
-        sfsa.addTransit(new Transit(s2, Arrays.asList(s4), verbPhrase));
+        sfsa.addTransit(new Transit(s2, Arrays.asList(s4), generateVP(depth-1)));
         sfsa.addTransit(new Transit(s2, Arrays.asList(s5), aux));
         sfsa.addTransit(new Transit(s4, Arrays.asList(s6), period));
         sfsa.addTransit(new Transit(s5, Arrays.asList(s7), space));
-        sfsa.addTransit(new Transit(s7, Arrays.asList(s4), verbPhrase));
+        sfsa.addTransit(new Transit(s7, Arrays.asList(s4), generateVP(depth-1)));
         sfsa.addTransit(new Transit(s3, Arrays.asList(s8), space));
-        sfsa.addTransit(new Transit(s8, Arrays.asList(s9), nounPhrase));
+        sfsa.addTransit(new Transit(s8, Arrays.asList(s9), generateNP(depth-1)));
         sfsa.addTransit(new Transit(s9, Arrays.asList(s10), space));
-        sfsa.addTransit(new Transit(s10, Arrays.asList(s11), verbPhrase));
+        sfsa.addTransit(new Transit(s10, Arrays.asList(s11), generateVP(depth-1)));
         sfsa.addTransit(new Transit(s11, Arrays.asList(s12), qMark));
 
         // generates a random S phrase structure sequence
@@ -86,7 +95,11 @@ public class TestFSA {
         return "Sample S: " + sampleS;
     }
 
-    public static String generateNP(){
+    public static String generateNP(int depth){
+        if (depth <= 0){
+            return empty;
+        }
+
         State s0 = new State(0, false);
         State s1 = new State(1, false);
         State s2 = new State(2, false);
@@ -109,15 +122,19 @@ public class TestFSA {
         npfsa.addTransit(new Transit(s2, Arrays.asList(s3), noun));
         npfsa.addTransit(new Transit(s3, Arrays.asList(s6), empty));
         npfsa.addTransit(new Transit(s3, Arrays.asList(s4), space));
-        npfsa.addTransit(new Transit(s4, Arrays.asList(s5), prepositionalPhrase));
-        npfsa.addTransit(new Transit(s4, Arrays.asList(s7), whAdverbPhrase));
+        npfsa.addTransit(new Transit(s4, Arrays.asList(s5), generatePP(depth-1)));
+        npfsa.addTransit(new Transit(s4, Arrays.asList(s7), generateWHNP(depth-1)));
     
         // generates a random NP phrase structure sequence
         String sampleNP = npfsa.generateRandomLanguage();
-        return "Sample NP: " + sampleNP;
+        return sampleNP;
     }
 
-    public static String generatePP(){
+    public static String generatePP(int depth){
+        if (depth <= 0){
+            return empty;
+        }
+
         State s0 = new State(0, false);
         State s1 = new State(1, false);
         State s2 = new State(2, false);
@@ -130,14 +147,18 @@ public class TestFSA {
 
         ppfsa.addTransit(new Transit(s0, Arrays.asList(s1), preposition));
         ppfsa.addTransit(new Transit(s1, Arrays.asList(s2), space));
-        ppfsa.addTransit(new Transit(s2, Arrays.asList(s3), nounPhrase));
+        ppfsa.addTransit(new Transit(s2, Arrays.asList(s3), generateNP(depth-1)));
 
         // generates a random NP phrase structure sequence
         String samplePP = ppfsa.generateRandomLanguage();
-        return "Sample PP: " + samplePP;
+        return samplePP;
     }
 
-    public static String generateVP(){
+    public static String generateVP(int depth){
+        if (depth <= 0){
+            return empty;
+        }
+
         State s0 = new State(0, false);
         State s1 = new State(1, true);
         State s2 = new State(2, false);
@@ -155,9 +176,9 @@ public class TestFSA {
 
         vpfsa.addTransit(new Transit(s0, Arrays.asList(s1), verb));
         vpfsa.addTransit(new Transit(s1, Arrays.asList(s2), space));
-        vpfsa.addTransit(new Transit(s2, Arrays.asList(s3), nounPhrase));
+        vpfsa.addTransit(new Transit(s2, Arrays.asList(s3), generateNP(depth-1)));
         vpfsa.addTransit(new Transit(s3, Arrays.asList(s4), space));
-        vpfsa.addTransit(new Transit(s4, Arrays.asList(s5), prepositionalPhrase));
+        vpfsa.addTransit(new Transit(s4, Arrays.asList(s5), generatePP(depth-1)));
         vpfsa.addTransit(new Transit(s5, Arrays.asList(s4), space));
         vpfsa.addTransit(new Transit(s0, Arrays.asList(s6), verb));
         vpfsa.addTransit(new Transit(s6, Arrays.asList(s7), space));
@@ -165,10 +186,14 @@ public class TestFSA {
 
         // generates a random NP phrase structure sequence
         String sampleVP = vpfsa.generateRandomLanguage();
-        return "Sample VP: " + sampleVP;
+        return sampleVP;
     }
 
-    public static String generateWHNP(){
+    public static String generateWHNP(int depth){
+        if (depth <= 0){
+            return empty;
+        }
+
         State s0 = new State(0, false);
         State s1 = new State(1, false);
         State s2 = new State(2, false);
@@ -192,50 +217,18 @@ public class TestFSA {
         wfsa.addTransit(new Transit(s1, Arrays.asList(s2),space));
         wfsa.addTransit(new Transit(s2, Arrays.asList(s3), whAdverb));
         wfsa.addTransit(new Transit(s3, Arrays.asList(s4), space));
-        wfsa.addTransit(new Transit(s4, Arrays.asList(s5), nounPhrase));
+        wfsa.addTransit(new Transit(s4, Arrays.asList(s5), generateNP(depth-1)));
         wfsa.addTransit(new Transit(s4, Arrays.asList(s6), aux));
         wfsa.addTransit(new Transit(s5, Arrays.asList(s7), space));
         wfsa.addTransit(new Transit(s7, Arrays.asList(s8), aux));
         wfsa.addTransit(new Transit(s6, Arrays.asList(s8), empty));
         wfsa.addTransit(new Transit(s8, Arrays.asList(s9), space));
-        wfsa.addTransit(new Transit(s9, Arrays.asList(s10), verbPhrase));
+        wfsa.addTransit(new Transit(s9, Arrays.asList(s10), generateVP(depth-1)));
         wfsa.addTransit(new Transit(s10, Arrays.asList(s11), comma));
         wfsa.addTransit(new Transit(s11, Arrays.asList(s12), space));
 
         // generates a random S phrase structure sequence
         String sampleW = wfsa.generateRandomLanguage();
-        return "Sample WHNP: " + sampleW;
-    }
-
-    public static String generateFSAWords(int count){
-        // initialize states
-        State s0 = new State(0, true); //start state
-        State s1 = new State(1, true);
-        State s2 = new State(2, true);
-
-        // initialize the FSA
-        FSA fsa = new FSA(s0);
-        fsa.addState(s1);
-        fsa.addState(s2);
-
-        List<String> consonants = new ArrayList<>();
-        consonants.addAll(Arrays.asList("b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "y", "z",  "ch", "sh", "th", "zh", "qu"));
-
-        List<String> vowels = new ArrayList<>();
-        vowels.addAll(Arrays.asList("a", "e", "i", "o", "u", "ou", "or", "ire", "y"));
-        
-        for(String cons : consonants){
-            fsa.addTransit(new Transit(s0, Arrays.asList(s1), cons));
-        }
-        
-        for(String vowel : vowels){
-            fsa.addTransit(new Transit(s1, Arrays.asList(s2), vowel));
-            fsa.addTransit(new Transit(s2, Arrays.asList(s1), vowel));
-            fsa.addTransit(new Transit(s1, Arrays.asList(s0), vowel));
-        }
-
-        // generates the random language
-        String sampleLang = fsa.generateRandomLanguage();
-        return "Strange Word #" + count + ": " + sampleLang;
+        return sampleW;
     }
 }
